@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import BookModel from '../../models/BookModel';
 import { SpinnerLoading } from '../utils/SpinnerLoading';
+import { SearchBook } from './components/SearchBooks';
 
 export const SearchBooksPage = () => {
   const [books, setBooks] = useState<BookModel[]>([]);
