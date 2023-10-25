@@ -3,8 +3,8 @@ class BookModel {
   title?: string;
   author?: string;
   description?: string;
-  copies?: string;
-  copiesAvailable?: string;
+  copies?: number;
+  copiesAvailable?: number;
   category?: string;
   img?: string;
 
@@ -13,8 +13,8 @@ class BookModel {
     title: string,
     author: string,
     description: string,
-    copies: string,
-    copiesAvailable: string,
+    copies: number,
+    copiesAvailable: number,
     category: string,
     img: string
   ) {
