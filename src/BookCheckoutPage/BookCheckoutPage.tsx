@@ -246,6 +246,7 @@ export const BookCheckoutPage = () => {
             isAuthenicated={authState?.isAuthenticated}
             isCheckedOut={isCheckOut}
             checkOutBook={checkOutBook}
+            isReviewLeft={isReviewLeft}
           />
         </div>
         <hr />
@@ -279,6 +280,7 @@ export const BookCheckoutPage = () => {
           isAuthenicated={authState?.isAuthenticated}
           isCheckedOut={isCheckOut}
           checkOutBook={checkOutBook}
+          isReviewLeft={isReviewLeft}
         />
 
         <hr />

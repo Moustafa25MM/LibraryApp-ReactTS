@@ -8,7 +8,28 @@ export const CheckoutAndReviewBox: React.FC<{
   isAuthenicated: any;
   isCheckedOut: boolean;
   checkOutBook: any;
+  isReviewLeft: Boolean;
 }> = (props) => {
+  function reviewRender() {
+    if (props.isAuthenicated && !props.isReviewLeft) {
+      return <p>Leave a Review</p>;
+    } else {
+      if (props.isAuthenicated && props.isReviewLeft) {
+        return (
+          <p>
+            <b>Thanks For Your Review</b>
+          </p>
+        );
+      }
+    }
+    return (
+      <div>
+        <hr>
+          <p>Sign in to be able to leave a review.</p>
+        </hr>
+      </div>
+    );
+  }
   function buttonRender() {
     if (props.isAuthenicated) {
       if (!props.isCheckedOut && props.currentLoansCount < 5) {
@@ -72,7 +93,7 @@ export const CheckoutAndReviewBox: React.FC<{
         <p className='mt-3'>
           This number can change until placing order has been complete.
         </p>
-        <p>Sign in to be able to leave a review.</p>
+        {reviewRender()}
       </div>
     </div>
   );
