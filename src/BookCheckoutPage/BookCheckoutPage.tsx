@@ -58,7 +58,7 @@ export const BookCheckoutPage = () => {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, []);
+  }, [isCheckOut]);
 
   useEffect(() => {
     const fetchBookReviews = async () => {
@@ -125,7 +125,7 @@ export const BookCheckoutPage = () => {
       setIsLoadingCurrentloansCount(false);
       setHttpError(err.message);
     });
-  }, [authState]);
+  }, [authState, isCheckOut]);
 
   useEffect(() => {
     const fetchUserCheckedOutBook = async () => {
@@ -168,6 +168,22 @@ export const BookCheckoutPage = () => {
       </div>
     );
   }
+
+  async function checkOutBook() {
+    const url = `http://localhost:8000/api/books/secure/checkout?bookId=${bookId}`;
+    const requestOptions = {
+      method: 'Put',
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    const checkoutResponse = await fetch(url, requestOptions);
+    if (!checkoutResponse.ok) {
+      throw new Error('something went wrong!');
+    }
+    setIsCheckOut(true);
+  }
   return (
     <div>
       <div className='container d-none d-lg-block'>
@@ -198,6 +214,7 @@ export const BookCheckoutPage = () => {
             currentLoansCount={currentloansCount}
             isAuthenicated={authState?.isAuthenticated}
             isCheckedOut={isCheckOut}
+            checkOutBook={checkOutBook}
           />
         </div>
         <hr />
@@ -230,6 +247,7 @@ export const BookCheckoutPage = () => {
           currentLoansCount={currentloansCount}
           isAuthenicated={authState?.isAuthenticated}
           isCheckedOut={isCheckOut}
+          checkOutBook={checkOutBook}
         />
 
         <hr />

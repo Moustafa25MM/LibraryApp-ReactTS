@@ -7,11 +7,19 @@ export const CheckoutAndReviewBox: React.FC<{
   currentLoansCount: number;
   isAuthenicated: any;
   isCheckedOut: boolean;
+  checkOutBook: any;
 }> = (props) => {
   function buttonRender() {
     if (props.isAuthenicated) {
       if (!props.isCheckedOut && props.currentLoansCount < 5) {
-        return <button className='btn btn-success btn-lg'>Checkout</button>;
+        return (
+          <button
+            onClick={() => props.checkOutBook()}
+            className='btn btn-success btn-lg'
+          >
+            Checkout
+          </button>
+        );
       } else if (props.isCheckedOut) {
         return (
           <p>
@@ -19,7 +27,7 @@ export const CheckoutAndReviewBox: React.FC<{
           </p>
         );
       } else if (!props.isCheckedOut) {
-        return <p className='text-danger'>Too Many Books Cheked Out.</p>;
+        return <p className='text-danger'>Too Many Books Checked Out.</p>;
       }
     }
     return (
