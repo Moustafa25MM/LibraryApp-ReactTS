@@ -4,6 +4,7 @@ import MessageModel from '../../../models/MessageModel';
 import { Pagination } from '../../utils/Pagination';
 import { SpinnerLoading } from '../../utils/SpinnerLoading';
 import { AdminMessage } from './AdminMessage';
+import AdminMessageRequest from '../../../models/AdminMessageRequest';
 
 export const AdminMessages = () => {
   const { authState } = useOktaAuth();
@@ -19,6 +20,9 @@ export const AdminMessages = () => {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+
+  // Recall useEffect
+  const [btnSubmit, setBtnSubmit] = useState(false);
 
   useEffect(() => {
     const fetchUserMessages = async () => {
@@ -49,7 +53,7 @@ export const AdminMessages = () => {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, [authState, currentPage]);
+  }, [authState, currentPage, btnSubmit]);
 
   if (isLoadingMessages) {
     return <SpinnerLoading />;
@@ -65,13 +69,44 @@ export const AdminMessages = () => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  async function submitResponseToQuestion(id: number, response: string) {
+    const url = `http://localhost:8000/api/messages/secure/admin/message`;
+    if (
+      authState &&
+      authState.isAuthenticated &&
+      id !== null &&
+      response !== ''
+    ) {
+      const messageAdminRequest: AdminMessageRequest = new AdminMessageRequest(
+        id,
+        response
+      );
+      const requestOptions = {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${authState.accessToken?.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageAdminRequest),
+      };
+      const adminMessageResponse = await fetch(url, requestOptions);
+      if (!adminMessageResponse.ok) {
+        throw new Error('something went wrong!');
+      }
+      setBtnSubmit(!btnSubmit);
+    }
+  }
   return (
     <div className='mt-3'>
       {messages.length > 0 ? (
         <>
           <h5>Pending Q/A: </h5>
           {messages.map((message) => (
-            <AdminMessage message={message} key={message.id} />
+            <AdminMessage
+              message={message}
+              key={message.id}
+              submitResponseToQuestion={submitResponseToQuestion}
+            />
           ))}
         </>
       ) : (

@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import MessageModel from '../../../models/MessageModel';
 
-export const AdminMessage: React.FC<{ message: MessageModel }> = (
-  props,
-  key
-) => {
+export const AdminMessage: React.FC<{
+  message: MessageModel;
+  submitResponseToQuestion: any;
+}> = (props, key) => {
   const [displayWarning, setDisplayWarning] = useState(false);
   const [response, setResponse] = useState('');
 
+  function submitBtn() {
+    if (props.message.id !== null && response !== '') {
+      props.submitResponseToQuestion(props.message.id, response);
+      setDisplayWarning(false);
+    } else {
+      setDisplayWarning(true);
+    }
+  }
   return (
     <div key={props.message.id}>
       <div className='card mt-2 shadow p-3 bg-body rounded'>
@@ -37,7 +45,11 @@ export const AdminMessage: React.FC<{ message: MessageModel }> = (
               ></textarea>
             </div>
             <div>
-              <button type='button' className='btn btn-primary mt-3'>
+              <button
+                onClick={submitBtn}
+                type='button'
+                className='btn btn-primary mt-3'
+              >
                 Submit Response
               </button>
             </div>
