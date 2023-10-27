@@ -2,7 +2,7 @@ class HistoryModel {
   id: number;
   userEmail: string;
   checkoutDate: string;
-  returendDated: string;
+  returnedDate: string;
   title: string;
   author: string;
   description: string;
@@ -12,7 +12,7 @@ class HistoryModel {
     id: number,
     userEmail: string,
     checkoutDate: string,
-    returendDated: string,
+    returnedDate: string,
     title: string,
     author: string,
     description: string,
@@ -21,7 +21,7 @@ class HistoryModel {
     this.id = id;
     this.userEmail = userEmail;
     this.checkoutDate = checkoutDate;
-    this.returendDated = returendDated;
+    this.returnedDate = returnedDate;
     this.title = title;
     this.author = author;
     this.description = description;
