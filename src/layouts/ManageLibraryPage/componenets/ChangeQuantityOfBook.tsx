@@ -5,6 +5,7 @@ import { useOktaAuth } from '@okta/okta-react';
 export const ChangeQuantityOfBook: React.FC<{
   book: BookModel;
   deleteBook: any;
+  updateBook: any;
 }> = (props, key) => {
   const { authState } = useOktaAuth();
   const [quantity, setQuantity] = useState<number>(0);
@@ -35,6 +36,7 @@ export const ChangeQuantityOfBook: React.FC<{
     }
     setQuantity(quantity + 1);
     setRemaining(remaining + 1);
+    props.updateBook();
   }
   async function decreaseQuantity() {
     const url = `http://localhost:8000/api/admin/secure/decrease/book/quantity?bookId=${props.book.id}`;
@@ -51,6 +53,7 @@ export const ChangeQuantityOfBook: React.FC<{
     }
     setQuantity(quantity - 1);
     setRemaining(remaining - 1);
+    props.updateBook();
   }
   async function deleteBook() {
     const url = `http://localhost:8000/api/admin/secure/delete/book?bookId=${props.book.id}`;

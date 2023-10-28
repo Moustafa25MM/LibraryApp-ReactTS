@@ -15,6 +15,7 @@ export const ChangeQuantityOfBooks = () => {
   const [totalAmountOfBooks, setTotalAmountOfBooks] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [bookUpdate, setBookUpdate] = useState(false);
   const [bookDelete, setBookDelete] = useState(false);
   useEffect(() => {
     const fetchBooks = async () => {
@@ -72,6 +73,9 @@ export const ChangeQuantityOfBooks = () => {
   const deleteBook = () => {
     setBookDelete(!bookDelete);
   };
+  const updateBook = () => {
+    setBookUpdate(!bookUpdate);
+  };
   if (isLoading) {
     return <SpinnerLoading />;
   }
@@ -99,6 +103,7 @@ export const ChangeQuantityOfBooks = () => {
               book={book}
               key={book.id}
               deleteBook={deleteBook}
+              updateBook={updateBook}
             />
           ))}
         </>
