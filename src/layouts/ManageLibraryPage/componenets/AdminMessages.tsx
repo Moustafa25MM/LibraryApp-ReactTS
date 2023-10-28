@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useOktaAuth } from '@okta/okta-react';
 import { useEffect, useState } from 'react';
 import MessageModel from '../../../models/MessageModel';
