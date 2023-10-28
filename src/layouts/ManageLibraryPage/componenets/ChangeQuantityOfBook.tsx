@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import BookModel from '../../../models/BookModel';
 import { useOktaAuth } from '@okta/okta-react';
 
-export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
-  props,
-  key
-) => {
+export const ChangeQuantityOfBook: React.FC<{
+  book: BookModel;
+  deleteBook: any;
+}> = (props, key) => {
   const { authState } = useOktaAuth();
   const [quantity, setQuantity] = useState<number>(0);
   const [remaining, setRemaining] = useState<number>(0);
@@ -35,6 +35,37 @@ export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
     }
     setQuantity(quantity + 1);
     setRemaining(remaining + 1);
+  }
+  async function decreaseQuantity() {
+    const url = `http://localhost:8000/api/admin/secure/decrease/book/quantity?bookId=${props.book.id}`;
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    const quantityUpdateResponse = await fetch(url, requestOptions);
+    if (!quantityUpdateResponse.ok) {
+      throw new Error('Something Went Wrong!.');
+    }
+    setQuantity(quantity - 1);
+    setRemaining(remaining - 1);
+  }
+  async function deleteBook() {
+    const url = `http://localhost:8000/api/admin/secure/delete/book?bookId=${props.book.id}`;
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    const updateResponse = await fetch(url, requestOptions);
+    if (!updateResponse.ok) {
+      throw new Error('Something Went Wrong!.');
+    }
+    props.deleteBook();
   }
 
   return (
@@ -87,7 +118,9 @@ export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
         </div>
         <div className='mt-3 col-md-1'>
           <div className='d-flex justify-content-start'>
-            <button className='m-1 btn btn-md btn-danger'>Delete</button>
+            <button onClick={deleteBook} className='m-1 btn btn-md btn-danger'>
+              Delete
+            </button>
           </div>
         </div>
         <button
@@ -96,7 +129,12 @@ export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
         >
           Add Quantity
         </button>
-        <button className='m1 btn btn-md btn-warning'>Decrease Quantity</button>
+        <button
+          onClick={decreaseQuantity}
+          className='m1 btn btn-md btn-warning'
+        >
+          Decrease Quantity
+        </button>
       </div>
     </div>
   );
