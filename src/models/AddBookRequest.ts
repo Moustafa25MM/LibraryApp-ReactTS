@@ -11,15 +11,13 @@ class AddBookRequest {
     author: string,
     description: string,
     copies: number,
-    category: string,
-    img: string
+    category: string
   ) {
     this.title = title;
     this.author = author;
     this.description = description;
     this.copies = copies;
     this.category = category;
-    this.img = img;
   }
 }
 

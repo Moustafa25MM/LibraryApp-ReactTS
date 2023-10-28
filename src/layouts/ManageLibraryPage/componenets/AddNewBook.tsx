@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useOktaAuth } from '@okta/okta-react';
 import { useState } from 'react';
+import AddBookRequest from '../../../models/AddBookRequest';
 
 export const AddNewBook = () => {
   const { authState } = useOktaAuth();
@@ -38,6 +39,49 @@ export const AddNewBook = () => {
     };
   }
 
+  async function submitNewBook() {
+    const url = `http://localhost:8000/api/admin/secure/add/book`;
+    if (
+      authState?.isAuthenticated &&
+      title !== '' &&
+      author !== '' &&
+      category !== 'Category' &&
+      description !== '' &&
+      copies > 0
+    ) {
+      const book: AddBookRequest = new AddBookRequest(
+        title,
+        author,
+        description,
+        copies,
+        category
+      );
+      book.img = selectedImage;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authState.accessToken?.accessToken}`,
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(book),
+      };
+      const submitNewBookResponse = await fetch(url, requestOptions);
+      if (!submitNewBookResponse.ok) {
+        throw new Error('Something went wrong!!');
+      }
+      setTitle('');
+      setAuthor('');
+      setDescription('');
+      setCopies(0);
+      setCategory('Category');
+      setSelectedImage(null);
+      setDisplayWarning(false);
+      setDisplaySuccess(true);
+    } else {
+      setDisplayWarning(true);
+      setDisplaySuccess(false);
+    }
+  }
   return (
     <div className='container mt-5 mb-5'>
       {displaySuccess && (
@@ -151,7 +195,11 @@ export const AddNewBook = () => {
             </div>
             <input onChange={(e) => base64ConversionForImages(e)} type='file' />
             <div>
-              <button type='button' className='btn btn-primary mt-3'>
+              <button
+                onClick={submitNewBook}
+                type='button'
+                className='btn btn-primary mt-3'
+              >
                 Add Book
               </button>
             </div>
