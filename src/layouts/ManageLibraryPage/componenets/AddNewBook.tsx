@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useOktaAuth } from '@okta/okta-react';
 import { useState } from 'react';
 
@@ -18,6 +19,23 @@ export const AddNewBook = () => {
 
   function categoryField(value: string) {
     setCategory(value);
+  }
+
+  async function base64ConversionForImages(image: any) {
+    if (image.target.files[0]) {
+      getBase64(image.target.files[0]);
+    }
+  }
+
+  function getBase64(file: any) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      setSelectedImage(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log('Error ', error);
+    };
   }
 
   return (
@@ -131,7 +149,7 @@ export const AddNewBook = () => {
                 value={copies}
               />
             </div>
-            <input type='file' />
+            <input onChange={(e) => base64ConversionForImages(e)} type='file' />
             <div>
               <button type='button' className='btn btn-primary mt-3'>
                 Add Book
