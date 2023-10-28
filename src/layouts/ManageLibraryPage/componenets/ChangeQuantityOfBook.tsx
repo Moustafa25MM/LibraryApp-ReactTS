@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import BookModel from '../../../models/BookModel';
+import { useOktaAuth } from '@okta/okta-react';
 
 export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
   props,
   key
 ) => {
+  const { authState } = useOktaAuth();
   const [quantity, setQuantity] = useState<number>(0);
   const [remaining, setRemaining] = useState<number>(0);
 
@@ -17,6 +19,23 @@ export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
     };
     fetchBookInState();
   }, []);
+
+  async function increaseQuantity() {
+    const url = `http://localhost:8000/api/admin/secure/increase/book/quantity?bookId=${props.book.id}`;
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    const quantityUpdateResponse = await fetch(url, requestOptions);
+    if (!quantityUpdateResponse.ok) {
+      throw new Error('Something Went Wrong!.');
+    }
+    setQuantity(quantity + 1);
+    setRemaining(remaining + 1);
+  }
 
   return (
     <div className='card mt-3 shadow p-3 mb-3 bg-body rounded'>
@@ -71,7 +90,10 @@ export const ChangeQuantityOfBook: React.FC<{ book: BookModel }> = (
             <button className='m-1 btn btn-md btn-danger'>Delete</button>
           </div>
         </div>
-        <button className='m1 btn btn-md main-color text-white'>
+        <button
+          onClick={increaseQuantity}
+          className='m1 btn btn-md main-color text-white'
+        >
           Add Quantity
         </button>
         <button className='m1 btn btn-md btn-warning'>Decrease Quantity</button>
