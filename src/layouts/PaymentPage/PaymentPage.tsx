@@ -15,7 +15,7 @@ export const PaymentPage = () => {
   useEffect(() => {
     const fetchFees = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8000/api/payments/searc/findByUserEmail?userEmail=${authState.accessToken?.claims.sub}`;
+        const url = `${process.env.REACT_APP_API}/payments/search/findByUserEmail?userEmail=${authState.accessToken?.claims.sub}`;
         const requestOptions = {
           method: 'GET',
           headers: {
@@ -83,7 +83,7 @@ export const PaymentPage = () => {
           setSubmitDisabled(false);
           alert('There was an Error');
         } else {
-          const url = `http://localhost:8000/api/payment/secure/payment-complete`;
+          const url = `${process.env.REACT_APP_API}/payment/secure/payment-complete`;
           const requestOptions = {
             method: 'PUT',
             headers: {
