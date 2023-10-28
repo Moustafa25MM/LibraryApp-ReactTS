@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import BookModel from '../../../models/BookModel';
 import { SpinnerLoading } from '../../utils/SpinnerLoading';
 import { Pagination } from '../../utils/Pagination';
+import { ChangeQuantityOfBook } from './ChangeQuantityOfBook';
 
 export const ChangeQuantityOfBooks = () => {
   const [books, setBooks] = useState<BookModel[]>([]);
@@ -55,6 +56,7 @@ export const ChangeQuantityOfBooks = () => {
       setIsLoading(false);
       setHttpError(error.message);
     });
+    window.scrollTo(0, 0);
   }, [currentPage]);
 
   const indexOfLastBook: number = currentPage * booksPerPage;
@@ -89,7 +91,7 @@ export const ChangeQuantityOfBooks = () => {
             {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
           </p>
           {books.map((book) => (
-            <p>Display different quantity of books</p>
+            <ChangeQuantityOfBook book={book} />
           ))}
         </>
       ) : (
